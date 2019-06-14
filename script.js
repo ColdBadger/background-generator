@@ -52,6 +52,7 @@ function userDirectionClick() {
 } else if (inputLength() < 0 || isNaN(a) === true || a > 360) {
 	alert("Please Enter A Valid Number Between 0 And 360");
 	direction.value = [];
+	direction.focus();
 } 
 }
 //SETS USER SPECIFIED GRADIENT DIRECTION ON USER ENTER KEYPRESS
