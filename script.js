@@ -7,7 +7,7 @@ var body = document.getElementById("gradient");
 var generator = document.querySelector(".generator");
 var direction = document.querySelector(".direction");
 var changeDirection = document.querySelector(".change-direction");
-var tempDirection = "";
+var tempDirection = [];
 //
 function inputLength() {
 	return direction.value.length;
@@ -16,22 +16,26 @@ function inputLength() {
 function generateButtonClick() {
 	generateBackground();
 }
-//DISPLAYS INITIAL RGB VALUE OF INPUT COLOR
+//DISPLAYS INITIAL AND CURRENT CSS LINEAR-GRADIENT VALUE
 function displayCSS() {
-    css.textContent = body.style.background + ";";
+	css.textContent = body.style.background + ";";
+	direction.focus();
+}
+function checkDirectionEquality(){
+	return direction.value === tempDirection || direction.value === "";
 }
 //CALLS TO CHANGE BACKGROUND ON COLOR INPUT OR GRADIENT CHANGE EVENT, AND DISPLAYS NEW COLOR VALUE
 function setGradient() {
 	var gradientBackground = "linear-gradient("+ direction.value +"deg, " + color1.value + ", " + color2.value + ")";
     body.style.background = gradientBackground;
     generator.style.background = gradientBackground;
-    changeDirection.style.background = gradientBackground;
+	changeDirection.style.background = gradientBackground;
     displayCSS();
 }
 //SETS RANDOM GRADIENT DIRECTION ON USER CLICK 
 //!!!WON'T RUN AFTER userDirectionClick OR userDirectionEnter!!!!
-function randomDirectionClick() {
-	if (direction.value === tempDirection) {
+function randomDirectionEvent() {
+	if (checkDirectionEquality()) {
 		direction.value = Math.floor(Math.random() * (+ 360 - (+0))) + (+0); 
 		tempDirection = direction.value;
 		setGradient();
@@ -42,20 +46,26 @@ function randomDirectionClick() {
 //SETS USER SPECIFIED GRADIENT DIRECTION ON CLICK
 function userDirectionClick() {
 	var a = direction.value;
-	if (a >= 0 && a <= 360){
+	if (a >= 0 && a <= 360 && a != tempDirection){
+	tempDirection = a;
 	setGradient();
+} else if (inputLength() < 0 || isNaN(a) === true || a > 360) {
+	alert("Please Enter A Valid Number Between 0 And 360");
+	direction.value = [];
 } 
 }
 //SETS USER SPECIFIED GRADIENT DIRECTION ON USER ENTER KEYPRESS
 function userDirectionEnter(event) {
 	var a = direction.value;
 	if (event.keyCode===13 && inputLength() > 0 && isNaN(a) === false && a < 360 && a >= 0){
+		tempDirection = a;
 		setGradient();
 	} else if (inputLength() < 0 || isNaN(a) === true || a > 360) {
 		alert("Please Enter A Valid Number Between 0 And 360");
-		direction.value = "";
-	}
+		direction.value = [];
+	} 
 }
+
 //SETS INITIAL BACKGROUND VALUES TO MATCH INPUT COLOR AND GENERATES NEW RANDOM COLORS ON CLICK
 function generateBackground() {
 	direction.value = Math.floor(Math.random() * (+ 360 - (+0))) + (+0); 
@@ -76,10 +86,12 @@ color2.addEventListener("input", setGradient);
 
 generator.addEventListener("click", generateButtonClick);
 
-changeDirection.addEventListener("click", randomDirectionClick);
+changeDirection.addEventListener("click", randomDirectionEvent);
 
 direction.addEventListener("keypress", userDirectionEnter); 
+
 //CALL FUNCTIONS
 generateBackground();
 displayCSS();
+direction.focus();
 
