@@ -28,7 +28,8 @@ function setGradient() {
     changeDirection.style.background = gradientBackground;
     displayCSS();
 }
-//SETS RANDOM GRADIENT DIRECTION ON USER CLICK UNLESS USER ENTERS VALUE MANUALLY
+//SETS RANDOM GRADIENT DIRECTION ON USER CLICK 
+//!!!WON'T RUN AFTER userDirectionClick OR userDirectionEnter!!!!
 function randomDirectionClick() {
 	if (direction.value === tempDirection) {
 		direction.value = Math.floor(Math.random() * (+ 360 - (+0))) + (+0); 
@@ -37,14 +38,13 @@ function randomDirectionClick() {
 	} else {
 		userDirectionClick();
 	}
-	return;
 }
+//SETS USER SPECIFIED GRADIENT DIRECTION ON CLICK
 function userDirectionClick() {
 	var a = direction.value;
 	if (a >= 0 && a <= 360){
 	setGradient();
 } 
-return;
 }
 //SETS USER SPECIFIED GRADIENT DIRECTION ON USER ENTER KEYPRESS
 function userDirectionEnter(event) {
@@ -75,8 +75,6 @@ color1.addEventListener("input", setGradient);
 color2.addEventListener("input", setGradient);
 
 generator.addEventListener("click", generateButtonClick);
-
-// changeDirection.addEventListener("click", userDirectionClick);
 
 changeDirection.addEventListener("click", randomDirectionClick);
 
