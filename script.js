@@ -34,7 +34,7 @@ function setGradient() {
 }
 //SETS RANDOM GRADIENT DIRECTION ON USER CLICK 
 //!!!WON'T RUN AFTER userDirectionClick OR userDirectionEnter!!!!
-function randomDirectionEvent() {
+function randomDirectionClick() {
 	if (checkDirectionEquality()) {
 		direction.value = Math.floor(Math.random() * (+ 360 - (+0))) + (+0); 
 		tempDirection = direction.value;
@@ -55,18 +55,26 @@ function userDirectionClick() {
 } 
 direction.focus();
 }
-//SETS USER SPECIFIED GRADIENT DIRECTION ON USER ENTER KEYPRESS
-function userDirectionEnter(event) {
+function userDirectionEnter() {
 	var a = direction.value;
-	if (event.keyCode===13 && inputLength() > 0 && isNaN(a) === false && a < 360 && a >= 0){
+	if (inputLength() > 0 && isNaN(a) === false && a < 360 && a >= 0 && a != tempDirection){
 		tempDirection = a;
 		setGradient();
 	} else if (inputLength() < 0 || isNaN(a) === true || a > 360) {
 		alert("Please Enter A Valid Number Between 0 And 360");
 		direction.value = [];
-	} 
+	}
 }
-
+function randomDirectionEnter(event) {
+	var a = direction.value;
+	if (event.keyCode===13 && checkDirectionEquality()){
+		direction.value = Math.floor(Math.random() * (+ 360 - (+0))) + (+0); 
+		tempDirection = direction.value;
+		setGradient();
+	} else if (event.keyCode===13 && checkDirectionEquality() === false) {
+		userDirectionEnter();
+	}
+}
 //SETS INITIAL BACKGROUND VALUES TO MATCH INPUT COLOR AND GENERATES NEW RANDOM COLORS ON CLICK
 function generateBackground() {
 	direction.value = Math.floor(Math.random() * (+ 360 - (+0))) + (+0); 
@@ -79,7 +87,6 @@ function generateBackground() {
     tempDirection = direction.value;
     displayCSS();
 }
-
 //EVENT LISTENERS
 color1.addEventListener("input", setGradient);
 
@@ -87,9 +94,9 @@ color2.addEventListener("input", setGradient);
 
 generator.addEventListener("click", generateButtonClick);
 
-changeDirection.addEventListener("click", randomDirectionEvent);
+changeDirection.addEventListener("click", randomDirectionClick);
 
-direction.addEventListener("keypress", userDirectionEnter); 
+direction.addEventListener("keypress", randomDirectionEnter); 
 
 //CALL FUNCTIONS
 generateBackground();
